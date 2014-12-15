@@ -9,19 +9,19 @@
 <a class="view_signup" href="#">Sign up</a> | <a class="view_signin" href="#">Sign in</a> | <a class="view_chats" href="#">View Chats</a>
 <script src="public/js/handlebars-v2.0.0.js"></script>
 <script src="public/js/jquery-2.1.1.min.js"></script>
-
+<div class="logged_in"></div>
 
 <div class="chats"></div>
 
-  <form class="signup_form">
-    <input id="username" name="username" type="text" placeholder="username">
-    <input id="password" name="password" type="password" placeholder="password">
-    <input class="signin_button" type="submit" value="Sign Up!">
-  </form>
-  
   <form class="signin_form">
     <input id="signin_username" name="username" type="text" placeholder="username">
     <input id="signin_password" name="password" type="password" placeholder="password">
+    <input class="signin_button" type="submit" value="Sign In!">
+  </form>
+  
+  <form class="signup_form">
+    <input id="username" name="username" type="text" placeholder="username">
+    <input id="password" name="password" type="password" placeholder="password">
     <input name="confirm_password" type="password" placeholder="confirm password">
     <input class="signup_button" type="submit" value="Sign Up!">
   </form>
@@ -59,6 +59,8 @@
     $(document).ready(function (){
       $('.view_signup').on('click', function(e){
         $('.signup_form').show()
+        $('.signin_form').hide()
+        $('.chats').hide()
       })
       
     })
@@ -78,6 +80,35 @@
    })
  </script>
 
+ <script>
+     $(document).ready(function (){
+      $('.view_signin').on('click', function(e){
+        $('.signin_form').show()
+        $('.signup_form').hide()
+        $('.chats').hide()
+      })
+      
+    })
+
+   $(".signin_form").on("submit", function(e) {
+      e.preventDefault()
+      console.log("in click")
+     $.ajax({
+       type: 'POST',
+       url: 'http://chat.api.mks.io/signin',
+       data: {username: $("#signin_username").val(), password: $("#signin_password").val()}
+       
+     })
+     .success(function (token) {
+      $('logged_in').append('Signed in as' + username)
+      $('.signin_form').hide()
+       console.log("success", token);
+       sessionStorage.setItem('apiToken',token['apiToken']);
+       console.log(sessionStorage.getItem('apiToken'))
+     })
+   })
+   
+ </script>
 
 </body>
 </html>
