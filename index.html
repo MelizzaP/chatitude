@@ -2,7 +2,7 @@
 <head>
   <title>Chatitude</title>
   <style type="text/css" media="screen">
-    .signup_form { display: none; }
+    .signup_form, .signin_form { display: none; }
   </style>
 </head>
 <body>
@@ -10,18 +10,23 @@
 <script src="public/js/handlebars-v2.0.0.js"></script>
 <script src="public/js/jquery-2.1.1.min.js"></script>
 
-<div class="signup"></div>
+
 <div class="chats"></div>
 
-
-<!-- <script type="text/x-handlebars-template" id="signup-template"> -->
   <form class="signup_form">
-    <input name="username" type="text" placeholder="username">
-    <input name="password" type="password" placeholder="password">
-    <input name="confirm_password" type="password" placeholder="confirm password">
-    <input type="submit" value="Sign Up!">
+    <input id="username" name="username" type="text" placeholder="username">
+    <input id="password" name="password" type="password" placeholder="password">
+    <input class="signin_button" type="submit" value="Sign Up!">
   </form>
-<!-- </script> -->
+  
+  <form class="signin_form">
+    <input id="signin_username" name="username" type="text" placeholder="username">
+    <input id="signin_password" name="password" type="password" placeholder="password">
+    <input name="confirm_password" type="password" placeholder="confirm password">
+    <input class="signup_button" type="submit" value="Sign Up!">
+  </form>
+  
+
 
 <!-- this is my chat template script -->
 <script id="chat-template" type="text/x-handlebars-template">
@@ -35,8 +40,6 @@
   $(document).ready(function (){
     $('.view_chats').on('click', function(e){ 
       $('.chats').show()
-      $('.signin').hide()
-      $('.signup').hide()
       var source   = $("#chat-template").html()
       var template = Handlebars.compile(source)
       
@@ -56,22 +59,17 @@
     $(document).ready(function (){
       $('.view_signup').on('click', function(e){
         $('.signup_form').show()
-        
-/*
-        var source   = $("#signup-template").html()
-        var template = Handlebars.compile(source)
-*/
-/*         $('.signup').append(template) */
       })
       
     })
 
-   $(".signup_form").click(function() {
-     console.log("in click")
+   $(".signup_form").on("submit", function(e) {
+      e.preventDefault()
+      console.log("in click")
      $.ajax({
        type: 'POST',
        url: 'http://chat.api.mks.io/signup',
-       data: {username: $("[name=username]", this).val(), password: $("[name=password]", this).val()}
+       data: {username: $("#username").val(), password: $("#password").val()}
        
      })
      .success(function () {
