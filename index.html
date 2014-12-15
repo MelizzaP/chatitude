@@ -1,9 +1,12 @@
 <html>
 <head>
-<title>Chatitude</title>
+  <title>Chatitude</title>
+  <style type="text/css" media="screen">
+    .signup_form { display: none; }
+  </style>
 </head>
 <body>
-<a class="signup" href="#">Sign up</a> | <a class="signin" href="#">Sign in</a> | <a class="chats" href="#">View Chats</a>
+<a class="view_signup" href="#">Sign up</a> | <a class="view_signin" href="#">Sign in</a> | <a class="view_chats" href="#">View Chats</a>
 <script src="public/js/handlebars-v2.0.0.js"></script>
 <script src="public/js/jquery-2.1.1.min.js"></script>
 
@@ -11,14 +14,14 @@
 <div class="chats"></div>
 
 
-<script type="text/x-handlebars-template" id="signup">
-  <form method="post" action="chat.api.mks.io/signup">
-  <input name="username" type="text" placeholder="username">
-  <input name="password" type="password" placeholder="password">
-  <input name="confirm_password" type="password" placeholder="confirm password">
-  <button>Sign up!</button>
+<!-- <script type="text/x-handlebars-template" id="signup-template"> -->
+  <form class="signup_form">
+    <input name="username" type="text" placeholder="username">
+    <input name="password" type="password" placeholder="password">
+    <input name="confirm_password" type="password" placeholder="confirm password">
+    <input type="submit" value="Sign Up!">
   </form>
-</script>
+<!-- </script> -->
 
 <!-- this is my chat template script -->
 <script id="chat-template" type="text/x-handlebars-template">
@@ -29,21 +32,54 @@
 
 <!-- this is my handlebar stuff for the chat template -->
 <script>
-  var source   = $("#chat-template").html()
-  var template = Handlebars.compile(source)
-  
-  var url = "http://chat.api.mks.io/chats"
-  	$.get(url, function (chats) {
-  		chats.forEach(function (chat) {
-  			var chatHtml = template(chat)
-  			$('.chats').append(chatHtml)
-  		})
+  $(document).ready(function (){
+    $('.view_chats').on('click', function(e){ 
+      $('.chats').show()
+      $('.signin').hide()
+      $('.signup').hide()
+      var source   = $("#chat-template").html()
+      var template = Handlebars.compile(source)
+      
+      var url = "http://chat.api.mks.io/chats"
+      	$.get(url, function (chats) {
+      		chats.forEach(function (chat) {
+      			var chatHtml = template(chat)
+      			$('.chats').append(chatHtml)
+      		})
+      })
+    })
   })
 </script>
 
+<!-- this should display the signup form -->
 <script>
-  var sou
-</script>
+    $(document).ready(function (){
+      $('.view_signup').on('click', function(e){
+        $('.signup_form').show()
+        
+/*
+        var source   = $("#signup-template").html()
+        var template = Handlebars.compile(source)
+*/
+/*         $('.signup').append(template) */
+      })
+      
+    })
+
+   $(".signup_form").click(function() {
+     console.log("in click")
+     $.ajax({
+       type: 'POST',
+       url: 'http://chat.api.mks.io/signup',
+       data: {username: $("[name=username]", this).val(), password: $("[name=password]", this).val()}
+       
+     })
+     .success(function () {
+       console.log("success")
+     })
+   })
+ </script>
+
 
 </body>
 </html>
