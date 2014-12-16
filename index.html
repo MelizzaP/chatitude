@@ -7,147 +7,45 @@
   </style>
 </head>
 <body>
-<div class="logged_in"></div>
-  <a class="view_signup" href="#">Sign up</a> | 
-  <a class="view_signin" href="#">Sign in</a> |
-  <a class="view_chats" href="#">View Chats</a> | 
-  <a class="view_post" href="#">New Post</a>
-
-
-<script src="public/js/handlebars-v2.0.0.js"></script>
-<script src="public/js/jquery-2.1.1.min.js"></script>
-
-
-<div class="chats"></div>
-
-<form class="signin_form">
-  <input id="signin_username" name="username" type="text" placeholder="username">
-  <input id="signin_password" name="password" type="password" placeholder="password">
-  <input class="signin_button" type="submit" value="Sign In!">
-</form>
+  <div class="logged_in"></div>
+    <a class="view_signup" href="#">Sign up</a> | 
+    <a class="view_signin" href="#">Sign in</a> | 
+    <a class="view_post" href="#">New Post</a>
   
-<form class="signup_form">
-  <input id="username" name="username" type="text" placeholder="username">
-  <input id="password" name="password" type="password" placeholder="password">
-  <input name="confirm_password" type="password" placeholder="confirm password">
-  <input class="signup_button" type="submit" value="Sign Up!">
-</form>
-
-<form class="post_form">
-  <input class="message" name="post" type="text" placeholder="Post here">
-  <input class="post_button" type="submit" value="post">
-</form>
-
-
-
-<!-- this is my chat template script -->
-<script id="chat-template" type="text/x-handlebars-template">
-	<div class="chat">
-	  	<b>{{user}} -- </b> {{message}} ({{time}})
-	</div>
-</script>
-
-<!-- this is my handlebar stuff for the chat template -->
-<script>
-  $(document).ready(function (){
-    setInterval(chatUpdate, 7000)
-    var source   = $("#chat-template").html()
-    var template = Handlebars.compile(source)
-    var url = "http://chat.api.mks.io/chats"
-    function chatUpdate() {
-      $('.chats').children().remove();
-      $.get(url, function (chats) {
-        chats.forEach(function (chat) {
-          var chatHtml = template(chat);
-          $('.chats').append(chatHtml);
-      })
-    })
-   }
-  })
   
-</script>
-
-<!-- this should display the signup form -->
-<script>
-    $(document).ready(function (){
-      $('.view_signup').on('click', function(e){
-        $('.signup_form').show()
-        $('.signin_form').hide()
-        $('.chats').hide()
-        $('#post').show()
-      })
-      
-    })
-
-   $(".signup_form").on("submit", function(e) {
-      e.preventDefault()
-      console.log("in click")
-     $.ajax({
-       type: 'POST',
-       url: 'http://chat.api.mks.io/signup',
-       data: {username: $("#username").val(), password: $("#password").val()}
-       
-     })
-     .success(function () {
-       console.log("success")
-     })
-   })
- </script>
-
- <script>
-     $(document).ready(function (){
-      $('.view_signin').on('click', function(e){
-        $('.signin_form').show()
-        $('.signup_form').hide()
-        $('.chats').hide()
-        $('.post').hide()
-      })
-      
-    })
-
-   $(".signin_form").on("submit", function(e) {
-      e.preventDefault()
-      console.log("in click")
-     $.ajax({
-       type: 'POST',
-       url: 'http://chat.api.mks.io/signin',
-       data: {username: $("#signin_username").val(), password: $("#signin_password").val()}
-       
-     })
-     .success(function (token) {
-      $('.logged_in').append('Signed in as ' + $('#signin_username').val())
-      $('.signin_form').hide()
-       console.log("success", token);
-       sessionStorage.setItem('apiToken',token['apiToken']);
-       sessionStorage.setItem('username', $('#signin_username').val());
-       console.log(sessionStorage.getItem('apiToken'));
-       console.log(sessionStorage.getItem('username'));
-     })
-   })
-   
- </script>
- 
-<script>
-   $(document).ready(function (){
-     $('.view_post').on('click', function(e){
-       $('.post').show();
-      })
-    })
-  $('.post_form').on('submit', function(e){
-    e.preventDefault();
-    console.log('click');
-    $.ajax({
-      type: 'POST',
-      url: 'http://chat.api.mks.io/chats',
-      data: {
-        apiToken: sessionStorage.getItem('apiToken'), 
-        message: $('.message').val(), 
-        username: sessionStorage.getItem('username')}
-    }).success(function(){
-      console.log('sucess')
-    })
-  }) 
-</script>
+  <script src="public/js/handlebars-v2.0.0.js"></script>
+  <script src="public/js/jquery-2.1.1.min.js"></script>
+  <script src="public/js/signup.js"></script>
+  <script src="public/js/signin.js"></script>
+  <script src="public/js/chat.js"></script>
+  
+  
+  <div class="chats"></div>
+  
+  <form class="signin_form">
+    <input id="signin_username" name="username" type="text" placeholder="username">
+    <input id="signin_password" name="password" type="password" placeholder="password">
+    <input class="signin_button" type="submit" value="Sign In!">
+  </form>
+    
+  <form class="signup_form">
+    <input id="username" name="username" type="text" placeholder="username">
+    <input id="password" name="password" type="password" placeholder="password">
+    <input name="confirm_password" type="password" placeholder="confirm password">
+    <input class="signup_button" type="submit" value="Sign Up!">
+  </form>
+  
+  <form class="post_form">
+    <input class="message" name="post" type="text" placeholder="Post here">
+    <input class="post_button" type="submit" value="post">
+  </form>
+  
+  <!-- this is my chat template script -->
+  <script id="chat-template" type="text/x-handlebars-template">
+  	<div class="chat">
+  	  	<b>{{user}} -- </b> {{message}} ({{time}})
+  	</div>
+  </script>
 
 </body>
 </html>
