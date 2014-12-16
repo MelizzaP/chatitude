@@ -50,20 +50,21 @@
 <!-- this is my handlebar stuff for the chat template -->
 <script>
   $(document).ready(function (){
-    $('.view_chats').on('click', function(e){ 
-      $('.chats').show()
-      var source   = $("#chat-template").html()
-      var template = Handlebars.compile(source)
-      
-      var url = "http://chat.api.mks.io/chats"
-      	$.get(url, function (chats) {
-      		chats.forEach(function (chat) {
-      			var chatHtml = template(chat)
-      			$('.chats').append(chatHtml)
-      		})
+    setInterval(chatUpdate, 7000)
+    var source   = $("#chat-template").html()
+    var template = Handlebars.compile(source)
+    var url = "http://chat.api.mks.io/chats"
+    function chatUpdate() {
+      $('.chats').children().remove();
+      $.get(url, function (chats) {
+        chats.forEach(function (chat) {
+          var chatHtml = template(chat);
+          $('.chats').append(chatHtml);
       })
     })
+   }
   })
+  
 </script>
 
 <!-- this should display the signup form -->
@@ -145,9 +146,7 @@
     }).success(function(){
       console.log('sucess')
     })
-  })
-  
-  
+  }) 
 </script>
 
 </body>
