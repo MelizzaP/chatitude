@@ -9,14 +9,14 @@ $(document).ready(function (){
 })
 
 $(".signup_form").on("submit", function(e) {
-  e.preventDefault()
- $.ajax({
-   type: 'POST',
-   url: 'http://chat.api.mks.io/signup',
-   data: {username: $("#username").val(), password: $("#password").val()}
-   
- })
- .success(function () {
-   console.log("success")
- })
-})
+      e.preventDefault()
+     $.ajax({
+       type: 'POST',
+       url: 'http://chat.api.mks.io/signup',
+       data: {username: $("#username").val(), password: $("#password").val()}  
+     })
+     .success(function () {
+       console.log("success")
+     })
+    })
+  

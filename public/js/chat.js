@@ -1,14 +1,17 @@
 $(document).ready(function (){
-  setInterval(chatUpdate, 7000)
+  setInterval(chatUpdate, 50)
   var source   = $("#chat-template").html()
   var template = Handlebars.compile(source)
   var url = "http://chat.api.mks.io/chats"
   function chatUpdate() {
-    $('.chats').children().remove();
+    
     $.get(url, function (chats) {
+      $('.chats').children().remove();
       chats.forEach(function (chat) {
         var chatHtml = template(chat);
+        
         $('.chats').append(chatHtml);
+        
     })
   })
  }
